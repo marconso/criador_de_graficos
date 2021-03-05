@@ -105,7 +105,7 @@
   </action>
   <action name="actionPlotar_gr_fico">
    <property name="text">
-    <string>Plotar gráfico</string>
+    <string>Criar gráfico</string>
    </property>
   </action>
   <action name="actionSalvar_gr_fico">
