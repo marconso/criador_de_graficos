@@ -75,19 +75,22 @@ class CriaGrafico(QMainWindow):
                                               pasta_principal)
         try:
             if arquivo[0].endswith(".csv"):
-                self.dados.to_csv(f"{arquivo[0].split('/')[-1]}",
-                                  index=False)
+                self.dados.to_csv(f"{arquivo[0]}", index=False)
             elif arquivo[0].endswith(".xls"):
-                self.dados.to_excel(f"{arquivo[0].split('/')[-1]}",
-                                    index=False)
+                self.dados.to_excel(f"{arquivo[0]}", index=False)
             elif arquivo[0].endswith(".xlsx"):
-                self.dados.to_excel(f"{arquivo[0].split('/')[-1]}",
-                                    index=False)
+                self.dados.to_excel(f"{arquivo[0]}", index=False)
             else:
-                self.dados.to_csv(f"{arquivo[0].split('/')[-1]}",
-                                  index=False)
+                self.dados.to_csv(f"{arquivo[0]}", index=False)
         except AttributeError:
-            print("nada para salvar")
+            if arquivo[0].endswith(".csv"):
+                pd.DataFrame().to_csv(f"{arquivo[0]}", index=False)
+            elif arquivo[0].endswith(".xls"):
+                pd.DataFrame().to_excel(f"{arquivo[0]}", index=False)
+            elif arquivo[0].endswith(".xlsx"):
+                pd.DataFrame().to_excel(f"{arquivo[0]}", index=False)
+            else:
+                pd.DataFrame().to_csv(f"{arquivo[0]}", index=False)
 
     def selecionar_colunas(self):
         try:
