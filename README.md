@@ -1,3 +1,5 @@
 # criador_de_graficos
 
-O código ta bem verboso
+Uma aplicação com o intuito de facilitar a criação de gráficos.
+
+**Em desenvolvimento...**
