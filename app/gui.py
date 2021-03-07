@@ -83,14 +83,17 @@ class CriaGrafico(QMainWindow):
             else:
                 self.dados.to_csv(f"{arquivo[0]}", index=False)
         except AttributeError:
-            if arquivo[0].endswith(".csv"):
-                pd.DataFrame().to_csv(f"{arquivo[0]}", index=False)
-            elif arquivo[0].endswith(".xls"):
-                pd.DataFrame().to_excel(f"{arquivo[0]}", index=False)
-            elif arquivo[0].endswith(".xlsx"):
-                pd.DataFrame().to_excel(f"{arquivo[0]}", index=False)
-            else:
-                pd.DataFrame().to_csv(f"{arquivo[0]}", index=False)
+            try:
+                if arquivo[0].endswith(".csv"):
+                    pd.DataFrame().to_csv(f"{arquivo[0]}", index=False)
+                elif arquivo[0].endswith(".xls"):
+                    pd.DataFrame().to_excel(f"{arquivo[0]}", index=False)
+                elif arquivo[0].endswith(".xlsx"):
+                    pd.DataFrame().to_excel(f"{arquivo[0]}", index=False)
+                else:
+                    pd.DataFrame().to_csv(f"{arquivo[0]}", index=False)
+            except FileNotFoundError:
+                pass
 
     def selecionar_colunas(self):
         try:
