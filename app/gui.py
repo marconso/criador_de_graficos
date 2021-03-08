@@ -8,6 +8,8 @@ from PyQt5.QtWidgets import (QApplication, QMainWindow, QFileDialog,
                              QTableWidgetItem, QMessageBox)
 from PyQt5.QtGui import QStandardItemModel, QStandardItem
 from PyQt5.QtCore import pyqtSignal
+from pyqtgraph import PlotWidget, plot
+import pyqtgraph as pg
 import pandas as pd
 
 pasta_principal = os.path.expanduser("~/")
@@ -28,6 +30,7 @@ class CriaGrafico(QMainWindow):
             self.concatenar_arquivos
         )
         self.actionSair.triggered.connect(self.sair)
+        self.actionTipos_de_gr_fico.triggered.connect(self.cria_grafico)
 
         self.initUI()
 
@@ -155,6 +158,9 @@ class CriaGrafico(QMainWindow):
         except AttributeError:
             pass
 
+    def cria_grafico(self):
+        self.janelagrafico = JanelaGrafico()
+
 
 class SelecaoColuna(QMainWindow):
 
@@ -207,6 +213,16 @@ class SelecaoColuna(QMainWindow):
 
     def reverter(self):
         self.reverter_.emit()
+
+
+class JanelaGrafico(QMainWindow):
+    def __init__(self, *args, **kwargs):
+        super(QMainWindow, self).__init__(*args, **kwargs)
+
+        self.grafico = pg.PlotWidget()
+        self.setCentralWidget(self.grafico)
+        self.grafico.plot(hour, temp)
+        self.show()
 
 
 def main():
