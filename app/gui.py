@@ -30,7 +30,8 @@ class CriaGrafico(QMainWindow):
             self.concatenar_arquivos
         )
         self.actionSair.triggered.connect(self.sair)
-        self.actionTipos_de_gr_fico.triggered.connect(self.cria_grafico)
+        self.actionTipos_de_gr_fico.triggered.connect(self.lista_grafico)
+        self.actionPlotar_gr_fico.triggered.connect(self.cria_grafico)
 
         self.initUI()
 
@@ -158,8 +159,15 @@ class CriaGrafico(QMainWindow):
         except AttributeError:
             pass
 
-    def cria_grafico(self):
+    def lista_grafico(self):
+        print('lista grafico')
         self.janelagrafico = JanelaGrafico()
+
+    def cria_grafico(self):
+        if 'self.dados_filtrados' in locals():
+            print('testou locals')
+        elif 'self.dados_filtrados' in globals():
+            print('testou globals')
 
 
 class SelecaoColuna(QMainWindow):
@@ -216,13 +224,28 @@ class SelecaoColuna(QMainWindow):
 
 
 class JanelaGrafico(QMainWindow):
+
     def __init__(self, *args, **kwargs):
-        super(QMainWindow, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
+
+        self.args = args
+        self.kwargs = kwargs
 
         self.grafico = pg.PlotWidget()
         self.setCentralWidget(self.grafico)
-        self.grafico.plot(hour, temp)
+
+    def seletor_de_colunas(self):
+        pass
+
+    def cria_grafico(self):
+        self.grafico.plot()
         self.show()
+
+    def lista_de_graficos(self):
+        pass
+
+    def salvar_grafico(self):
+        pass
 
 
 def main():
