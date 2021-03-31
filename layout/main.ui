@@ -36,7 +36,7 @@
      <x>0</x>
      <y>0</y>
      <width>862</width>
-     <height>23</height>
+     <height>32</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuAbrir">
@@ -64,9 +64,16 @@
     <addaction name="actionFiltrar_dados"/>
     <addaction name="actionConcatenar_dados"/>
    </widget>
+   <widget class="QMenu" name="menuSobre">
+    <property name="title">
+     <string>Sobre</string>
+    </property>
+    <addaction name="actionDesenvolvimento"/>
+   </widget>
    <addaction name="menuAbrir"/>
    <addaction name="menuEditar"/>
    <addaction name="menuGr_fico"/>
+   <addaction name="menuSobre"/>
   </widget>
   <action name="actionSalvar">
    <property name="text">
@@ -121,6 +128,11 @@
   <action name="actionConcatenar_dados">
    <property name="text">
     <string>Concatenar arquivos</string>
+   </property>
+  </action>
+  <action name="actionDesenvolvimento">
+   <property name="text">
+    <string>Desenvolvimento</string>
    </property>
   </action>
  </widget>

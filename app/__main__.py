@@ -5,7 +5,7 @@ import sys
 import os
 from PyQt5 import uic
 from PyQt5.QtWidgets import (QApplication, QMainWindow, QFileDialog,
-                             QTableWidgetItem, QMessageBox)
+     QTableWidgetItem, QMessageBox, QDialog)
 from PyQt5.QtGui import QStandardItemModel, QStandardItem
 from PyQt5.QtCore import pyqtSignal
 from pyqtgraph import PlotWidget, plot
@@ -32,6 +32,7 @@ class CriaGrafico(QMainWindow):
         self.actionSair.triggered.connect(self.sair)
         self.actionTipos_de_gr_fico.triggered.connect(self.lista_grafico)
         self.actionPlotar_gr_fico.triggered.connect(self.cria_grafico)
+        # self.actionDesenvolvimento.triggered.connect(self.infor)
 
         self.initUI()
 
@@ -160,7 +161,6 @@ class CriaGrafico(QMainWindow):
             pass
 
     def lista_grafico(self):
-        print('lista grafico')
         self.janelagrafico = JanelaGrafico()
 
     def cria_grafico(self):
@@ -168,6 +168,11 @@ class CriaGrafico(QMainWindow):
             print('testou locals')
         elif 'self.dados_filtrados' in globals():
             print('testou globals')
+
+    def infor(self):
+        self.sobre = Sobre()
+        self.sobre.setFixedSize(365, 81)
+        self.sobre.show()
 
 
 class SelecaoColuna(QMainWindow):
@@ -246,6 +251,12 @@ class JanelaGrafico(QMainWindow):
 
     def salvar_grafico(self):
         pass
+
+
+class Sobre(QDialog):
+    def __init__(self):
+        super().__init__()
+        uic.loadUi(pasta_layout + "sobre.ui", self)
 
 
 def main():
