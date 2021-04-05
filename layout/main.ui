@@ -70,8 +70,14 @@
     </property>
     <addaction name="actionDesenvolvimento"/>
    </widget>
+   <widget class="QMenu" name="menuAnalise">
+    <property name="title">
+     <string>Análise</string>
+    </property>
+   </widget>
    <addaction name="menuAbrir"/>
    <addaction name="menuEditar"/>
+   <addaction name="menuAnalise"/>
    <addaction name="menuGr_fico"/>
    <addaction name="menuSobre"/>
   </widget>
