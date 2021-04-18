@@ -24,7 +24,6 @@ class CriaGrafico(QMainWindow):
 
         uic.loadUi(pasta_layout + "main.ui", self)
 
-        self.setWindowIcon(QIcon(pasta_assets + "cat_ico.png"))
         self.setMinimumSize(480, 320)
         self.actionAbrir.triggered.connect(self.carregar_dados)
         self.actionSalvar_2.triggered.connect(self.salvar_dados)
@@ -49,11 +48,11 @@ class CriaGrafico(QMainWindow):
                                                Excel 2007–365 (*.xlsx);;\
                                                Excel 97–2003 (*.xls)"))
         if arquivo[0].endswith(".csv"):
-            self.dados = pd.read_csv(arquivo[0])
+            self.dados = pd.read_csv(arquivo[0], low_memory=False)
         elif arquivo[0].endswith(".xls"):
-            self.dados = pd.read_excel(arquivo[0])
+            self.dados = pd.read_excel(arquivo[0], low_memory=False)
         elif arquivo[0].endswith(".xlsx"):
-            self.dados = pd.read_excel(arquivo[0])
+            self.dados = pd.read_excel(arquivo[0], low_memory=False)
 
         try:
             self.escreve_tabela(self.dados)
@@ -264,6 +263,7 @@ class Sobre(QDialog):
 
 def main():
     app = QApplication(sys.argv)
+    app.setWindowIcon(QIcon(pasta_assets + "cat_ico.png"))
     foo = CriaGrafico()
     sys.exit(app.exec_())
 
