@@ -11,3 +11,7 @@ Uma aplicação com o intuito de facilitar a criação de gráficos estatístico
 **source venv/bin/activate**
 ### Agora pode instale as dependências sem risco de conflito seu sistema :)
 **pip install -r requirements.txt**
+### Para rodar o aplicativo
+**python3 app**
+ou
+**python3 app/__main__.py**
