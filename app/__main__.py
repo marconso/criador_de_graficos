@@ -6,7 +6,7 @@ import os
 from PyQt5 import uic
 from PyQt5.QtWidgets import (QApplication, QMainWindow, QFileDialog,
      QTableWidgetItem, QMessageBox, QDialog)
-from PyQt5.QtGui import QStandardItemModel, QStandardItem
+from PyQt5.QtGui import QStandardItemModel, QStandardItem, QIcon
 from PyQt5.QtCore import pyqtSignal
 from pyqtgraph import PlotWidget, plot
 import pyqtgraph as pg
@@ -14,6 +14,7 @@ import pandas as pd
 
 pasta_principal = os.path.expanduser("~/")
 pasta_layout = os.path.join(os.path.dirname(__file__), "../layout/")
+pasta_assets = os.path.join(os.path.dirname(__file__), "../assets/")
 
 
 class CriaGrafico(QMainWindow):
@@ -23,6 +24,8 @@ class CriaGrafico(QMainWindow):
 
         uic.loadUi(pasta_layout + "main.ui", self)
 
+        self.setWindowIcon(QIcon(pasta_assets + "cat_ico.png"))
+        self.setMinimumSize(480, 320)
         self.actionAbrir.triggered.connect(self.carregar_dados)
         self.actionSalvar_2.triggered.connect(self.salvar_dados)
         self.actionFiltrar_dados.triggered.connect(self.selecionar_colunas)
