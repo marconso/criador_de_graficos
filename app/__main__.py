@@ -5,12 +5,15 @@ import sys
 import os
 from PyQt5 import uic
 from PyQt5.QtWidgets import (QApplication, QMainWindow, QFileDialog,
-     QTableWidgetItem, QMessageBox, QDialog)
+     QTableWidgetItem, QMessageBox, QDialog, QMenu)
 from PyQt5.QtGui import QStandardItemModel, QStandardItem, QIcon
 from PyQt5.QtCore import pyqtSignal
 from pyqtgraph import PlotWidget, plot
 import pyqtgraph as pg
 import pandas as pd
+
+from testes import teste_kappa_fleiss
+
 
 pasta_principal = os.path.expanduser("~/")
 pasta_layout = os.path.join(os.path.dirname(__file__), "../layout/")
@@ -34,6 +37,8 @@ class CriaGrafico(QMainWindow):
         self.actionSair.triggered.connect(self.sair)
         self.actionTipos_de_gr_fico.triggered.connect(self.lista_grafico)
         self.actionPlotar_gr_fico.triggered.connect(self.cria_grafico)
+        # self.menuTratar_dados.triggered.connect(self.remove_na)
+        self.actionKappa_Fleiss.triggered.connect(self.executa_teste)
         # self.actionDesenvolvimento.triggered.connect(self.infor)
 
         self.initUI()
@@ -50,9 +55,9 @@ class CriaGrafico(QMainWindow):
         if arquivo[0].endswith(".csv"):
             self.dados = pd.read_csv(arquivo[0], low_memory=False)
         elif arquivo[0].endswith(".xls"):
-            self.dados = pd.read_excel(arquivo[0], low_memory=False)
+            self.dados = pd.read_excel(arquivo[0])
         elif arquivo[0].endswith(".xlsx"):
-            self.dados = pd.read_excel(arquivo[0], low_memory=False)
+            self.dados = pd.read_excel(arquivo[0])
 
         try:
             self.escreve_tabela(self.dados)
@@ -61,6 +66,8 @@ class CriaGrafico(QMainWindow):
 
     def escreve_tabela(self, dados):
         self.tableWidget.clear()
+        self.tableWidget.setRowCount(0)
+        self.tableWidget.setColumnCount(0)
         self.tableWidget.setRowCount(dados.shape[0])
         self.tableWidget.setColumnCount(dados.shape[1])
 
@@ -70,10 +77,11 @@ class CriaGrafico(QMainWindow):
             self.tableWidget.setHorizontalHeaderItem(i,
                 QTableWidgetItem(col)
             )
-            for linha in range(dados.shape[0]):
+            for linha in range(0, dados.shape[0]):
                 self.tableWidget.setItem(row_n, col_n,
                     QTableWidgetItem(str(self.dados[col][linha])))
                 row_n += 1
+
             row_n = 0
             col_n += 1
 
@@ -162,6 +170,31 @@ class CriaGrafico(QMainWindow):
         except AttributeError:
             pass
 
+    def executa_teste(self):
+        if self.sender().text() == "Kappa Fleiss":
+            self.escreve_relatorio(
+                teste_kappa_fleiss(
+                    self.dados, self.pega_colunas_selecionadas()
+                )
+            )
+
+    def pega_colunas_selecionadas(self):
+        rows = set(
+            cell.column() for cell in self.tableWidget.selectedIndexes()
+        )
+        headers = [
+            self.tableWidget.horizontalHeaderItem(r) for r in rows
+        ]
+        return [x.text() for x in headers if x is not None]
+
+    def escreve_relatorio(self, informacao):
+        self.plainTextEdit.clear()
+        self.plainTextEdit.insertPlainText(informacao)
+
+    def remove_na(self):
+        self.dados.dropna(inplace=True)
+        self.escreve_tabela(self.dados)
+
     def lista_grafico(self):
         self.janelagrafico = JanelaGrafico()
 
@@ -175,6 +208,14 @@ class CriaGrafico(QMainWindow):
         self.sobre = Sobre()
         self.sobre.setFixedSize(365, 81)
         self.sobre.show()
+
+    def contextMenuEvent(self, event):
+        contextMenu = QMenu(self)
+
+        sair = contextMenu.addAction("Sair")
+        action = contextMenu.exec_(self.mapToGlobal(event.pos()))
+
+        if action == sair: self.sair()
 
 
 class SelecaoColuna(QMainWindow):

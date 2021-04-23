@@ -22,7 +22,29 @@
       </property>
       <layout class="QGridLayout" name="gridLayout_2">
        <item row="0" column="0">
-        <widget class="QTableWidget" name="tableWidget"/>
+        <widget class="QTableWidget" name="tableWidget">
+         <property name="columnCount">
+          <number>0</number>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QGroupBox" name="groupBox_2">
+         <property name="title">
+          <string>Relatório</string>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout">
+          <item alignment="Qt::AlignRight">
+           <widget class="QPlainTextEdit" name="plainTextEdit">
+            <property name="font">
+             <font>
+              <pointsize>12</pointsize>
+             </font>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
        </item>
       </layout>
      </widget>
@@ -74,6 +96,21 @@
     <property name="title">
      <string>Análise</string>
     </property>
+    <widget class="QMenu" name="menuTestes">
+     <property name="title">
+      <string>Testes</string>
+     </property>
+     <addaction name="actionKappa_Fleiss"/>
+    </widget>
+    <widget class="QMenu" name="menuTratar_dados">
+     <property name="title">
+      <string>Tratar dados</string>
+     </property>
+     <addaction name="actionRemover_NA"/>
+    </widget>
+    <addaction name="actionAn_lise_descritiva"/>
+    <addaction name="menuTratar_dados"/>
+    <addaction name="menuTestes"/>
    </widget>
    <addaction name="menuAbrir"/>
    <addaction name="menuEditar"/>
@@ -139,6 +176,21 @@
   <action name="actionDesenvolvimento">
    <property name="text">
     <string>Desenvolvimento</string>
+   </property>
+  </action>
+  <action name="actionAn_lise_descritiva">
+   <property name="text">
+    <string>Análise descritiva</string>
+   </property>
+  </action>
+  <action name="actionKappa_Fleiss">
+   <property name="text">
+    <string>Kappa Fleiss</string>
+   </property>
+  </action>
+  <action name="actionRemover_NA">
+   <property name="text">
+    <string>Remover NA</string>
    </property>
   </action>
  </widget>
