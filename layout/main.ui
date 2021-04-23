@@ -94,6 +94,7 @@
       <string>Testes</string>
      </property>
      <addaction name="actionKappa_Fleiss"/>
+     <addaction name="actionTeste_T"/>
     </widget>
     <widget class="QMenu" name="menuTratar_dados">
      <property name="title">
@@ -183,6 +184,11 @@
   <action name="actionRemover_NA">
    <property name="text">
     <string>Remover NA</string>
+   </property>
+  </action>
+  <action name="actionTeste_T">
+   <property name="text">
+    <string>Teste T</string>
    </property>
   </action>
  </widget>
