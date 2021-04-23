@@ -30,14 +30,13 @@ class CriaGrafico(QMainWindow):
         self.setMinimumSize(480, 320)
         self.actionAbrir.triggered.connect(self.carregar_dados)
         self.actionSalvar_2.triggered.connect(self.salvar_dados)
-        self.actionFiltrar_dados.triggered.connect(self.selecionar_colunas)
         self.actionConcatenar_dados.triggered.connect(
             self.concatenar_arquivos
         )
         self.actionSair.triggered.connect(self.sair)
         self.actionTipos_de_gr_fico.triggered.connect(self.lista_grafico)
         self.actionPlotar_gr_fico.triggered.connect(self.cria_grafico)
-        # self.menuTratar_dados.triggered.connect(self.remove_na)
+        self.menuTratar_dados.triggered.connect(self.remove_na)
         self.actionKappa_Fleiss.triggered.connect(self.executa_teste)
         # self.actionDesenvolvimento.triggered.connect(self.infor)
 
@@ -66,24 +65,18 @@ class CriaGrafico(QMainWindow):
 
     def escreve_tabela(self, dados):
         self.tableWidget.clear()
-        self.tableWidget.setRowCount(0)
-        self.tableWidget.setColumnCount(0)
         self.tableWidget.setRowCount(dados.shape[0])
         self.tableWidget.setColumnCount(dados.shape[1])
 
-        col_n = 0
-        row_n = 0
         for i, col in enumerate(dados.columns):
             self.tableWidget.setHorizontalHeaderItem(i,
                 QTableWidgetItem(col)
             )
-            for linha in range(0, dados.shape[0]):
-                self.tableWidget.setItem(row_n, col_n,
-                    QTableWidgetItem(str(self.dados[col][linha])))
-                row_n += 1
 
-            row_n = 0
-            col_n += 1
+        for indice_coluna, col in enumerate(dados.columns.to_list()):
+            for indice_linha, linha in enumerate(dados[col]):
+                self.tableWidget.setItem(indice_linha, indice_coluna,
+                    QTableWidgetItem(str(linha)))
 
     def salvar_dados(self):
         arquivo = QFileDialog.getSaveFileName(self, "Salvar arquivo",
@@ -109,20 +102,6 @@ class CriaGrafico(QMainWindow):
                     pd.DataFrame().to_csv(f"{arquivo[0]}", index=False)
             except FileNotFoundError:
                 pass
-
-    def selecionar_colunas(self):
-        try:
-            if not self.dados.empty:
-                self.selecao_de_coluna = SelecaoColuna()
-                self.selecao_de_coluna.listWidget.addItems(
-                    self.dados.columns
-                )
-                self.selecao_de_coluna.selecao.connect(self.aplicar_mudancas)
-                self.selecao_de_coluna.reverter_.connect(self.restaura_bkp)
-            else:
-                pass
-        except AttributeError:
-            pass
 
     def concatenar_arquivos(self):
         lista_de_tabelas = []
@@ -151,12 +130,6 @@ class CriaGrafico(QMainWindow):
 
     def sair(self):
         self.close()
-
-    def aplicar_mudancas(self, colunas):
-        self.dados_backup = self.dados
-        remover = [col for col in self.dados.columns if col not in colunas]
-        self.dados_filtrados = self.dados.drop(remover, axis=1)
-        self.atualiza_layout(self.dados_filtrados)
 
     def atualiza_layout(self, dados):
         self.selecao_de_coluna.listWidget.clear()
