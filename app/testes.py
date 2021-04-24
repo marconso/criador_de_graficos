@@ -1,10 +1,11 @@
 from nltk import agreement
+from scipy import stats
+import pandas as pd
 
 
 def teste_kappa_fleiss(tabela, colunas):
     count = 0
     valor_coluna = []
-    # for coluna in tabela.columns.to_list():
     for coluna in colunas:
         valor_coluna += [
             [count, str(i), str(tabela[coluna][i])]
@@ -19,3 +20,11 @@ def teste_kappa_fleiss(tabela, colunas):
     )
 
     return resultado_final
+
+
+def teste_t_ind(tabela, colunas):
+    # tabela.dropna(inplace=True)
+
+    resultado = stats.ttest_ind(tabela[colunas[0]], tabela[colunas[1]])
+    print(resultado)
+    return f'T: {resultado[0]}\nP: {resultado[1]}'

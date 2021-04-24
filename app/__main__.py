@@ -5,14 +5,14 @@ import sys
 import os
 from PyQt5 import uic
 from PyQt5.QtWidgets import (QApplication, QMainWindow, QFileDialog,
-     QTableWidgetItem, QMessageBox, QDialog, QMenu)
-from PyQt5.QtGui import QStandardItemModel, QStandardItem, QIcon
+     QTableWidgetItem, QMessageBox, QDialog, QMenu, QMessageBox)
+from PyQt5.QtGui import QStandardItemModel, QStandardItem, QIcon, QFont
 from PyQt5.QtCore import pyqtSignal
 from pyqtgraph import PlotWidget, plot
 import pyqtgraph as pg
 import pandas as pd
 
-from testes import teste_kappa_fleiss
+from testes import teste_kappa_fleiss, teste_t_ind
 
 
 pasta_principal = os.path.expanduser("~/")
@@ -38,6 +38,7 @@ class CriaGrafico(QMainWindow):
         self.actionPlotar_gr_fico.triggered.connect(self.cria_grafico)
         self.menuTratar_dados.triggered.connect(self.remove_na)
         self.actionKappa_Fleiss.triggered.connect(self.executa_teste)
+        self.actionTeste_T.triggered.connect(self.executa_teste)
         # self.actionDesenvolvimento.triggered.connect(self.infor)
 
         self.initUI()
@@ -136,13 +137,6 @@ class CriaGrafico(QMainWindow):
         self.selecao_de_coluna.listWidget.addItems(dados.columns)
         self.escreve_tabela(dados)
 
-    def restaura_bkp(self):
-        try:
-            self.dados = self.dados_backup
-            self.atualiza_layout(self.dados)
-        except AttributeError:
-            pass
-
     def executa_teste(self):
         if self.sender().text() == "Kappa Fleiss":
             self.escreve_relatorio(
@@ -150,6 +144,15 @@ class CriaGrafico(QMainWindow):
                     self.dados, self.pega_colunas_selecionadas()
                 )
             )
+        elif self.sender().text() == "Teste T":
+            if len(self.pega_colunas_selecionadas()) == 2:
+                self.escreve_relatorio(
+                    teste_t_ind(
+                        self.dados, self.pega_colunas_selecionadas()
+                    )
+                )
+            else:
+                pass
 
     def pega_colunas_selecionadas(self):
         rows = set(
@@ -165,8 +168,14 @@ class CriaGrafico(QMainWindow):
         self.plainTextEdit.insertPlainText(informacao)
 
     def remove_na(self):
-        self.dados.dropna(inplace=True)
-        self.escreve_tabela(self.dados)
+        try:
+            self.dados.dropna(inplace=True)
+            self.escreve_tabela(self.dados)
+        except AttributeError:
+            self.erro = MensagemErro()
+            self.erro.setText("Arquivo não foi carregado ou não existe")
+            self.erro.buttonClicked.connect(lambda: self.destroy)
+            self.erro.show()
 
     def lista_grafico(self):
         self.janelagrafico = JanelaGrafico()
@@ -273,6 +282,18 @@ class Sobre(QDialog):
     def __init__(self):
         super().__init__()
         uic.loadUi(pasta_layout + "sobre.ui", self)
+
+
+class MensagemErro(QMessageBox):
+    def __init__(self):
+        super().__init__()
+
+        self.configuracao_basica()
+
+    def configuracao_basica(self):
+        self.setFont(QFont("Arial", 15))
+        self.setWindowTitle("Erro!")
+        self.setStandardButtons(self.Ok)
 
 
 def main():
