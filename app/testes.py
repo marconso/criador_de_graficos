@@ -23,8 +23,7 @@ def teste_kappa_fleiss(tabela, colunas):
 
 
 def teste_t_ind(tabela, colunas):
-    # tabela.dropna(inplace=True)
+    resultado = stats.ttest_ind(tabela[colunas[0]], tabela[colunas[1]],
+                                nan_policy='omit')
 
-    resultado = stats.ttest_ind(tabela[colunas[0]], tabela[colunas[1]])
-    print(resultado)
     return f'T: {resultado[0]}\nP: {resultado[1]}'

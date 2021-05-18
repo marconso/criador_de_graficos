@@ -48,7 +48,7 @@ class CriaGrafico(QMainWindow):
 
     def carregar_dados(self):
         arquivo = QFileDialog.getOpenFileName(self, "Abrir arquivo",
-                                              pasta_principal, 
+                                              pasta_principal,
                                               ("Arquivo csv (*.csv);;\
                                                Excel 2007–365 (*.xlsx);;\
                                                Excel 97–2003 (*.xls)"))
@@ -115,7 +115,7 @@ class CriaGrafico(QMainWindow):
                 pass
 
         arquivo = QFileDialog.getOpenFileName(self, "Abrir arquivo",
-                                              pasta_principal, 
+                                              pasta_principal,
                                               ("Arquivo csv (*.csv);;\
                                                Excel 2007–365 (*.xlsx);;\
                                                Excel 97–2003 (*.xls)"))
@@ -138,21 +138,24 @@ class CriaGrafico(QMainWindow):
         self.escreve_tabela(dados)
 
     def executa_teste(self):
-        if self.sender().text() == "Kappa Fleiss":
-            self.escreve_relatorio(
-                teste_kappa_fleiss(
-                    self.dados, self.pega_colunas_selecionadas()
-                )
-            )
-        elif self.sender().text() == "Teste T":
-            if len(self.pega_colunas_selecionadas()) == 2:
+        try:
+            if self.sender().text() == "Kappa Fleiss":
                 self.escreve_relatorio(
-                    teste_t_ind(
+                    teste_kappa_fleiss(
                         self.dados, self.pega_colunas_selecionadas()
                     )
                 )
-            else:
-                pass
+            elif self.sender().text() == "Teste T":
+                if len(self.pega_colunas_selecionadas()) == 2:
+                    self.escreve_relatorio(
+                        teste_t_ind(
+                            self.dados, self.pega_colunas_selecionadas()
+                        )
+                    )
+                else:
+                    pass
+        except AttributeError:
+            pass
 
     def pega_colunas_selecionadas(self):
         rows = set(
@@ -172,19 +175,25 @@ class CriaGrafico(QMainWindow):
             self.dados.dropna(inplace=True)
             self.escreve_tabela(self.dados)
         except AttributeError:
-            self.erro = MensagemErro()
-            self.erro.setText("Arquivo não foi carregado ou não existe")
-            self.erro.buttonClicked.connect(lambda: self.destroy)
-            self.erro.show()
+            pass
+            # self.erro = MensagemErro()
+            # self.erro.setText("Arquivo não foi carregado ou não existe")
+            # self.erro.buttonClicked.connect(lambda: self.destroy)
+            # self.erro.show()
 
     def lista_grafico(self):
         self.janelagrafico = JanelaGrafico()
 
     def cria_grafico(self):
-        if 'self.dados_filtrados' in locals():
-            print('testou locals')
-        elif 'self.dados_filtrados' in globals():
-            print('testou globals')
+        self.janelagrafico.cria_grafico(
+            self.dados[self.pega_colunas_selecionadas()[0]],
+            self.dados[self.pega_colunas_selecionadas()[1]]
+        )
+
+        # if 'self.dados_filtrados' in locals():
+        #     print('testou locals')
+        # elif 'self.dados_filtrados' in globals():
+        #     print('testou globals')
 
     def infor(self):
         self.sobre = Sobre()
@@ -267,8 +276,8 @@ class JanelaGrafico(QMainWindow):
     def seletor_de_colunas(self):
         pass
 
-    def cria_grafico(self):
-        self.grafico.plot()
+    def cria_grafico(self, *dados):
+        self.grafico.plot(*dados)
         self.show()
 
     def lista_de_graficos(self):
